@@ -1,25 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import './App.css';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+import { ReactQueryDevtools} from 'react-query/devtools'
+import Home from './pages/Home';
+
+const queryClient = new QueryClient()
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path='/'>
+      <Route index element={<Home />}/>
+    </Route>
+  )
+)
 
 function App() {
+  const cookies = new Cookies()
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+      <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
+    </QueryClientProvider>
   );
 }
 
